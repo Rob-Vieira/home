@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário 2025</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #21211f;
+            margin: 0;
+            padding: 20px;
+            color: #fff;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            justify-content: center;
+            /* max-width: 1200px; */
+            margin: auto;
+        }
+        .month {
+            background: #3a3a37;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .month h2 {
+            margin: 5px 0;
+            font-size: 20px;
+        }
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            font-size: 14px;
+        }
+        .day {
+            padding: 5px;
+            border-radius: 10px;
+            background: #676764;
+        }
+        .weekday {
+            font-weight: bold;
+            background: #bbb;
+            color: #000;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+        .legend{
+            display: flex;
+            justify-content: space-between;
+            /* margin: 0; */
+            padding: 0px 10px;
+            list-style: none;
+        }
+        .legend .list-item{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+        .legend .ball{
+            width: 10px;
+            height: 10px;
+            border-radius: 100%;
+        }
+        .marlon .ball{
+            background-color: #56beff;
+        }
+        .robson .ball{
+            background-color: #66ff89;
+        }
+        .thiago .ball{
+            background-color: #ffad6b;
+        }
+        .thamy .ball{
+            background-color: #ff4949;
+        }
+    </style>
+</head>
+<body>
+    <!-- <h1>Calendário 2025</h1> -->
+    <div class="calendar" id="calendar"></div>
+
+    <script>
+        function generateCalendar(year) {
+            const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            const weekdays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+            const colors = ["#ff4949", "#56beff", "#66ff89", "#ffad6b"];
+            const names = ["TG", "MP", "RV", "TS"];
+            let colorIndex = 0;
+            let weekPattern = [[0, 1, 2, 3], [3, 0, 1, 2], [2, 3, 0, 1], [1, 2, 3, 0]];
+            let weekCounter = 0;
+            const calendar = document.getElementById("calendar");
+            
+            months.forEach((month, index) => {
+                const firstDay = new Date(year, index, 1).getDay();
+                const daysInMonth = new Date(year, index + 1, 0).getDate();
+                
+                let monthDiv = document.createElement("div");
+                monthDiv.classList.add("month");
+                monthDiv.innerHTML = `<h2>${month}</h2>`;
+                
+                let daysDiv = document.createElement("div");
+                daysDiv.classList.add("days");
+                
+                weekdays.forEach(day => {
+                    let dayDiv = document.createElement("div");
+                    dayDiv.classList.add("day", "weekday");
+                    dayDiv.textContent = day;
+                    daysDiv.appendChild(dayDiv);
+                });
+                
+                for (let i = 0; i < firstDay; i++) {
+                    let emptyDiv = document.createElement("div");
+                    daysDiv.appendChild(emptyDiv);
+                }
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    let dayDiv = document.createElement("div");
+                    dayDiv.classList.add("day");
+                    dayDiv.textContent = day;
+                    
+                    let currentDay = new Date(year, index, day).getDay();
+                    if (index > 2 || (index === 2 && day >= 1)) {
+                        if (currentDay !== 3 && currentDay !== 6 && currentDay !== 0) {
+                            dayDiv.style.backgroundColor = colors[weekPattern[weekCounter][colorIndex]];
+                            dayDiv.style.color = '#000';
+                            dayDiv.style.fontWeight = 'bolder';
+                            colorIndex = (colorIndex + 1) % 4;
+                            if (colorIndex === 0) {
+                                weekCounter = (weekCounter + 1) % 4;
+                            }
+                        }
+                    }
+                    
+                    daysDiv.appendChild(dayDiv);
+                }
+                
+                const list = document.createElement('div');
+                list.innerHTML = `
+                    <ul class="legend">
+                        <li class="list-item marlon"><div class="ball"></div> Marlon</li>
+                        <li class="list-item robson"><div class="ball"></div> Robson</li>
+                        <li class="list-item thiago"><div class="ball"></div> Thiago</li>
+                        <li class="list-item thamy"><div class="ball"></div> Thamy</li>
+                    </ul>
+                `;
+
+                monthDiv.appendChild(daysDiv);
+                monthDiv.appendChild(list);
+                calendar.appendChild(monthDiv);
+            });
+        }
+        
+        generateCalendar(2025);
+    </script>
+</body>
+</html>
