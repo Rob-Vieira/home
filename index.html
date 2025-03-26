@@ -15,12 +15,25 @@
         }
         .calendar {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             justify-content: center;
-            /* max-width: 1200px; */
+            max-width: 1200px;
             margin: auto;
         }
+
+        @media (max-width: 988px){
+            .calendar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px){
+            .calendar {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+        
+
         .month {
             background: #3a3a37;
             padding: 10px;
